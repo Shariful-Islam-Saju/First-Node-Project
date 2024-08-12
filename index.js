@@ -1,4 +1,5 @@
 const http = require("http");
+
 const app = {};
 app.config = {
   port: 3000,
@@ -11,8 +12,7 @@ app.server = () => {
 };
 
 app.handleReq = (req, res) => {
-  res.end("Hello World");
+  res.end("<button>Hello World!</button>");
 };
 
-
-app.server()
+app.server();
