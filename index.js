@@ -1,6 +1,5 @@
 const http = require("http");
-const url = require("url");
-const { StringDecoder } = require("string_decoder");
+const { handleReqRes } = require("./helper/handleReqRes");
 const app = {};
 app.config = {
   port: 3000,
@@ -12,25 +11,6 @@ app.server = () => {
   });
 };
 
-app.handleReq = (req, res) => {
-  const parsedPath = url.parse(req.url, true);
-  const path = parsedPath.pathname;
-  const trimmedPathName = path.replace(/^\/+|\/+$/g, "");
-  const method = req.method.toLowerCase();
-  const queryStiringObj = parsedPath.query;
-  const headerObj = req.headers;
-  const decoder = new StringDecoder("utf-8");
-  let realData = "";
-
-  req.on("data", (buffer) => {
-    realData += decoder.write(buffer);
-  });
-
-  req.on("end", () => {
-    realData += decoder.end();
-    console.log(realData);
-    res.end("Hello Shariful Islam !!! ");
-  });
-};
+app.handleReq = handleReqRes;
 
 app.server();
