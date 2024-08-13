@@ -1,5 +1,6 @@
 const http = require("http");
 const url = require("url");
+const { StringDecoder } = require("string_decoder");
 const app = {};
 app.config = {
   port: 3000,
@@ -18,9 +19,18 @@ app.handleReq = (req, res) => {
   const method = req.method.toLowerCase();
   const queryStiringObj = parsedPath.query;
   const headerObj = req.headers;
+  const decoder = new StringDecoder("utf-8");
+  let realData = "";
 
-  res.end("Hello Shariful Islam !!! ");
-  
+  req.on("data", (buffer) => {
+    realData += decoder.write(buffer);
+  });
+
+  req.on("end", () => {
+    realData += decoder.end();
+    console.log(realData);
+    res.end("Hello Shariful Islam !!! ");
+  });
 };
 
 app.server();
